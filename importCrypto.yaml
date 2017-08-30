@@ -1,0 +1,86 @@
+---
+- name: Import Certificate and Key
+  hosts: lab:&suresnes
+  connection: local
+
+  tasks:
+#      - name: create a new Transaction
+#        f5_startTransaction:
+#            server: "{{ inventory_hostname }}"
+#            user: "{{ bigip_username }}"
+#            password: "{{ bigip_password }}"
+#            validate_certs: "{{ validate_certs }}"
+#        register: transId
+
+      - name: include Variables
+        include_vars: 'myVariables.yaml'
+
+      - name: UPLOAD CERTIFICATE FILE...
+        f5_uploadFile:
+            server: "{{ inventory_hostname }}"
+            fileName: "{{appName}}.cert"
+            fileType: "cert"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: result
+
+      - name: UPLOAD KEY FILE...
+        f5_uploadFile:
+            server: "{{ inventory_hostname }}"
+            fileName: "{{appName}}.key"
+            fileType: "key"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: result
+
+      - name: INSTALL KEY
+        f5_installCrypto:
+            server: "{{ inventory_hostname }}"
+#            transactionId: "{{transId.transId}}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            serviceName: "{{appName}}"
+            fileName: "{{appName}}.key"
+            fileType: "key"
+            validate_certs: "{{ validate_certs }}"
+        register: key
+
+      - name: INSTALL CERTIFICATE
+        f5_installCrypto:
+            server: "{{ inventory_hostname }}"
+#            transactionId: "{{transId.transId}}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            serviceName: "{{appName}}"
+            fileName: "{{appName}}.cert"
+            fileType: "cert"
+            validate_certs: "{{ validate_certs }}"
+        register: certificate
+
+#      - name: commit Transaction
+#        f5_commit:
+#            server: "{{ inventory_hostname }}"
+#            user: "{{ bigip_username }}"
+#            password: "{{ bigip_password }}"
+#            transactionId: "{{ transId.transId }}"
+
+
+      - name: CREATE SSL PROFILE
+        f5_sslProfile:
+            server: "{{ inventory_hostname }}"
+#            transactionId: ""
+            partition: "Common"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+            name: "{{appName}}_SSLProfile"
+            side: "client"
+            parent: "clientssl"
+            cert: "{{ certificate.name }}"
+            key: "{{ key.name }}"
+        delegate_to: localhost
+        register: result
