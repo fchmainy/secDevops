@@ -25,44 +25,46 @@ node {
    stage('Preparation') { 
       git 'https://github.com/fchmainy/secDevops.git'
    }
-   stage('Prepare Crawling') { 
-	sh 'cp base_crawl.w3af >> ${env.BUILD_ID}_crawl.w3af'
-        sh 'echo auth detailed >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo auth config detailed >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo set username ' + params.username + ' >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo set password '+ params.password + ' >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo set method ' + POST + ' >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo set auth_url ' + params.authURL + ' >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo set username_field ' + params.usernameField + ' >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo set password_field ' + params.passwordField + ' >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo set check_url ' + params.targetURL + ' >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo set check_string ' + params.checkString + ' >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo set data_format ' + params.dataFormat + ' >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo back >> ${env.BUILD_ID}_auth.tmp’
-	sh 'echo target >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo set target ' + params.targetURL + ' >> ${env.BUILD_ID}_auth.tmp'
-	sh 'echo back >> ${env.BUILD_ID}_auth.tmp’
-	sh 'echo cleanup >> ${env.BUILD_ID}_auth.tmp’
-	sh 'echo start >> ${env.BUILD_ID}_auth.tmp’
-	sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_crawl.w3af'
-   }
-   stage('Prepare DAST') { 
-	sh 'cp base_dast.w3af >> ${env.BUILD_ID}_dast.w3af’
-	sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo output console,xml_f5asm >> ${env.BUILD_ID}_dast.w3af'
-	sh 'echo output config xml_f5asm >> ${env.BUILD_ID}_dast.w3af'
-	sh 'echo set output_file ./reports/${env.BUILD_ID}_dast.xml >> ${env.BUILD_ID}_dast.w3af'
-	sh 'echo set verbose False >> ${env.BUILD_ID}_dast.w3af'
-	sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
-	sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
-	sh 'echo target >> ${env.BUILD_ID}_dast.w3af'
-	sh 'echo set target ' + params.targetURL + ' >> ${env.BUILD_ID}_dast.w3af'
-	sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
-	sh 'echo cleanup >> ${env.BUILD_ID}_dast.w3af'
-	sh 'echo start >> ${env.BUILD_ID}_dast.w3af'
+   stage('Prepare Crawling and DAST') { 
+	   steps {
+		sh 'cp base_crawl.w3af >> ${env.BUILD_ID}_crawl.w3af'
+        	sh 'echo auth detailed >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo auth config detailed >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo set username ${params.username} >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo set password ${params.password} >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo set method ${params.method} >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo set auth_url ${params.authURL} >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo set username_field ${params.usernameField} >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo set password_field ${params.passwordField} >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo set check_url ${params.targetURL} >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo set check_string ${params.checkString} >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo set data_format ${params.dataFormat} >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo back >> ${env.BUILD_ID}_auth.tmp’
+		sh 'echo target >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo set target ${params.targetURL} >> ${env.BUILD_ID}_auth.tmp'
+		sh 'echo back >> ${env.BUILD_ID}_auth.tmp’
+		sh 'echo cleanup >> ${env.BUILD_ID}_auth.tmp’
+		sh 'echo start >> ${env.BUILD_ID}_auth.tmp’
+		sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_crawl.w3af'
+   	}
+   	steps { 
+		sh 'cp base_dast.w3af >> ${env.BUILD_ID}_dast.w3af’
+		sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_dast.w3af'
+        	sh 'echo output console,xml_f5asm >> ${env.BUILD_ID}_dast.w3af'
+		sh 'echo output config xml_f5asm >> ${env.BUILD_ID}_dast.w3af'
+		sh 'echo set output_file ${env.BUILD_ID}_dast.xml >> ${env.BUILD_ID}_dast.w3af'
+		sh 'echo set verbose False >> ${env.BUILD_ID}_dast.w3af'
+		sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
+		sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
+		sh 'echo target >> ${env.BUILD_ID}_dast.w3af'
+		sh 'echo set target ${params.targetURL} >> ${env.BUILD_ID}_dast.w3af'
+		sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
+		sh 'echo cleanup >> ${env.BUILD_ID}_dast.w3af'
+		sh 'echo start >> ${env.BUILD_ID}_dast.w3af'
+   	}
    }
 
-   stage('Testing') {
+   stage('Testing Ansible Playbooks') {
       //sh "/usr/local/bin/ansible-lint myLab.yaml"
       sh "/usr/local/bin/ansible-review myVSConfig.yaml"
       sh "/usr/local/bin/ansible-review importPolicy.yaml"
@@ -71,34 +73,38 @@ node {
       sh "/usr/local/bin/ansible-review createASMPolicy.yaml"
    }
    stage('Build in QA') {
-       ansiblePlaybook(
-         colorized: true, 
-         inventory: 'hosts.ini', 
-         playbook: 'myVSConfig.yaml', 
-         extras: '-vvv',
-         sudoUser: null,
-         extraVars: [
-            host: 'qa':&params.zone,
-            bigip_username: 'admin',
-            bigip_password: [value: 'admin', hidden: true],
-            fqdn: params.fqdn,
-            appName: params.appName,
-            member: params.member,
-         ])
-       ansiblePlaybook(
-         colorized: true, 
-         inventory: 'hosts.ini', 
-         playbook: 'createASMPolicy.yaml', 
-         extras: '-vvv',
-         sudoUser: null,
-         extraVars: [
-            host: 'qa':&params.zone,
-            bigip_username: 'admin',
-            bigip_password: [value: 'admin', hidden: true],
-            fqdn: params.fqdn,
-            appName: params.appName,
-            member: params.member,
-         ])
+	   steps {
+       		ansiblePlaybook(
+         		colorized: true, 
+         		inventory: 'hosts.ini', 
+         		playbook: 'myVSConfig.yaml', 
+         		extras: '-vvv',
+         		sudoUser: null,
+         		extraVars: [
+            			host: 'qa':&params.zone,
+            			bigip_username: 'admin',
+            			bigip_password: [value: 'admin', hidden: true],
+            			fqdn: params.fqdn,
+            			appName: params.appName,
+            			member: params.member,
+         	])
+	   }
+	   steps {
+       		ansiblePlaybook(
+         		colorized: true, 
+         		inventory: 'hosts.ini', 
+         		playbook: 'createASMPolicy.yaml', 
+         		extras: '-vvv',
+         		sudoUser: null,
+         		extraVars: [
+            			host: 'qa':&params.zone,
+            			bigip_username: 'admin',
+            			bigip_password: [value: 'admin', hidden: true],
+            			fqdn: params.fqdn,
+            			appName: params.appName,
+            			member: params.member,
+         		])
+	   }
    }
    stage('Crawling') {
       sh "sudo ./w3af_console --no-update -s ${env.BUILD_ID}_crawl.w3af"
@@ -150,7 +156,7 @@ node {
             bigip_password: [value: 'admin', hidden: true],
             fqdn: params.fqdn,
             appName: params.appName,
-            fileName: ./reports/${env.BUILD_ID}_dast.xml,
+            fileName: ${env.BUILD_ID}_dast.xml,
          ])
    }
    stage('Create Service in Production') {
