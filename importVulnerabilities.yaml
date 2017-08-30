@@ -1,0 +1,98 @@
+---
+- name: Import DAST output and resolve vulnerabilities
+  hosts: lab:&suresnes
+  connection: local
+
+  tasks:
+      - name: include Variables
+        include_vars: 'myVariables.yaml'
+
+      - name: get ID
+        f5_asm_getPolicyID:
+            server: "{{ inventory_hostname }}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            policyName: "asm_{{appName}}"
+            validate_certs: "{{ validate_certs }}"
+        register: policyId
+#        no_log: true
+
+      - name: UPLOAD XML DAST OUTPUT
+        f5_upload_file:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            fileName: "dast_{{appName}}.xml"
+            fileType: "vulnerabilities"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: taskId
+
+      - name: IMPORT VULNERABILITIES
+        f5_asm_importVulneabilities:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            serviceName: "asm_{{appName}}"
+            policyId: "{{policyId.policyId}}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: taskId
+
+
+      - name: GET STATUS OF THE IMPORT
+        f5_asm_getStatus:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            taskId: "{{taskId.exportTask}}"
+            taskType: "import-vulnerabilities"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: status
+        until: status.taskStatus == "COMPLETED"
+        retries: 10
+        delay: 5
+
+      - name: COLLECT VULNERABILITIES...
+        f5_asm_collectVulnerabilities:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            policyId: "{{policyId.policyId}}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: vulnsArray
+
+
+      - name: RESOLVE VULNERABILITIES...
+        f5_asm_resolveVulnerabilities:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            vulnerabilities: "{{ vulnsArray.vulnerabilities }}"
+            policyId: "{{policyId.policyId}}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: taskId
+
+
+      - name: GET STATUS OF VULNERABILITIES RESOLVING...
+        f5_asm_getStatus:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            taskId: "{{taskId.resolveId}}"
+            taskType: "resolve-vulnerabilities"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: status
+        until: status.taskStatus == "COMPLETED"
+        retries: 10
+        delay: 5
