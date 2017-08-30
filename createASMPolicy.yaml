@@ -1,0 +1,22 @@
+---
+- name: Deploy a new Service
+  hosts: lab
+  connection: local
+
+  tasks:
+      - name: include Variables
+        include_vars: 'myVariables.yaml'
+
+      - name: Create an ASM Policy based on a Template and apply it to a VS
+        f5_asmPolicy:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            transactionId: "{{transId.transId}}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            partition: "{{ partition }}"
+            name: "{{fqdn}}_asm"
+            description: "This is an ASM Policy created automatically based on RDP"
+            virtual: "{{appName}}_vs"
+            lang: "utf-8"
+            enforcementMode: "blocking"
