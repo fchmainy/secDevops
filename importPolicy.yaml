@@ -1,0 +1,47 @@
+---
+- name: Import an ASM Policy
+  hosts: lab:&suresnes
+  connection: local
+
+  tasks:
+      - name: include Variables
+        include_vars: 'myVariables.yaml'
+
+      - name: UPLOAD XML ASM POLICY...
+        f5_uploadFile:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            fileName: "/tmp/asm_{{appName}}.xml"
+            fileType: "policy"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: result
+
+      - name: IMPORT POLICY
+        f5_asm_importPolicy:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            serviceName: "{{ appName }}"
+            targetPolicy: "asm_tested_{{ appName }}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: taskId
+
+      - name: GET STATUS OF THE IMPORT
+        f5_asm_getStatus:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            taskId: "{{taskId.taskId}}"
+            taskType: "import-policy"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: status
+        until: status.taskStatus == "COMPLETED"
+        retries: 10
+        delay: 5
