@@ -102,7 +102,6 @@ node {
             			bigip_password: [value: 'admin', hidden: true],
             			fqdn: params.fqdn,
             			appName: params.appName,
-            			member: params.member,
          		])
 	   }
    }
