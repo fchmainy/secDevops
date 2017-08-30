@@ -1,0 +1,57 @@
+---
+- name: Export an ASM Policy and write it locally to an XML file
+  hosts: lab:&suresnes
+  connection: local
+
+  tasks:
+      - name: include Variables
+        include_vars: 'myVariables.yaml'
+
+      - name: get ID
+        f5_asm_getPolicyID:
+            server: "{{ inventory_hostname }}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            policyName: "asm_{{appName}}"
+            validate_certs: "{{ validate_certs }}"
+        register: policyId
+#        no_log: true
+
+      - name: EXPORT POLICY
+        f5_asm_exportPolicy:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            serviceName: "asm_{{appName}}"
+            policyId: "{{policyId.policyId}}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: taskId
+
+
+      - name: GET STATUS OF THE EXPORT
+        f5_asm_getStatus:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            taskId: "{{taskId.exportTask}}"
+            taskType: "export-policy"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: status
+        until: status.taskStatus == "COMPLETED"
+        retries: 10
+        delay: 5
+
+      - name: GET EXPORTED POLICY
+        f5_asm_getExportedPolicy:
+            connection: "rest"
+            server: "{{ inventory_hostname }}"
+            serviceName: "asm_{{appName}}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        register: result
