@@ -25,36 +25,41 @@ node {
    stage('Preparation') { 
       git 'https://github.com/fchmainy/secDevops.git'
    }
-   stage(‘Prepare Crawling') { 
-	      sh 'cp base_crawl.w3af >> ${env.BUILD_ID}_crawl.w3af'
+   stage('Prepare Crawling') { 
+	sh 'cp base_crawl.w3af >> ${env.BUILD_ID}_crawl.w3af'
         sh 'echo auth detailed >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo auth config detailed >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo set username ‘ + params.username + ‘ >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo set password ‘+ params.password + ‘ >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo set method ‘+ POST + ‘ >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo set auth_url ‘+ params.authURL + ‘ >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo set username_field ‘+ params.usernameField + ‘ >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo set password_field ‘+ params.passwordField + ‘ >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo set check_url ‘+ params.targetURL + ‘ >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo set check_string ‘+ params.checkString + ‘ >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo set data_format ‘+ params.dataFormat + ‘ >> ${env.BUILD_ID}_auth.tmp'
-	      sh 'echo back >> ${env.BUILD_ID}_auth.tmp’
-	      sh ‘cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_crawl.w3af'
+	sh 'echo auth config detailed >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo set username ' + params.username + ' >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo set password '+ params.password + ' >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo set method ' + POST + ' >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo set auth_url ' + params.authURL + ' >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo set username_field ' + params.usernameField + ' >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo set password_field ' + params.passwordField + ' >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo set check_url ' + params.targetURL + ' >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo set check_string ' + params.checkString + ' >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo set data_format ' + params.dataFormat + ' >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo back >> ${env.BUILD_ID}_auth.tmp’
+	sh 'echo target >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo set target ' + params.targetURL + ' >> ${env.BUILD_ID}_auth.tmp'
+	sh 'echo back >> ${env.BUILD_ID}_auth.tmp’
+	sh 'echo cleanup >> ${env.BUILD_ID}_auth.tmp’
+	sh 'echo start >> ${env.BUILD_ID}_auth.tmp’
+	sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_crawl.w3af'
    }
-   stage(‘Prepare DAST') { 
-	      sh 'cp base_dast.w3af >> ${env.BUILD_ID}_dast.w3af’
-	      sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_dast.w3af'
+   stage('Prepare DAST') { 
+	sh 'cp base_dast.w3af >> ${env.BUILD_ID}_dast.w3af’
+	sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_dast.w3af'
         sh 'echo output console,xml_f5asm >> ${env.BUILD_ID}_dast.w3af'
-	      sh 'echo output config xml_f5asm >> ${env.BUILD_ID}_dast.w3af'
-	      sh 'echo set output_file ./reports/${env.BUILD_ID}_dast.xml >> ${env.BUILD_ID}_dast.w3af'
-	      sh 'echo set verbose False >> ${env.BUILD_ID}_dast.w3af'
-	      sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
-	      sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
-	      sh 'echo target >> ${env.BUILD_ID}_dast.w3af'
-	      sh 'echo set target ' + params.targetURL + ' >> ${env.BUILD_ID}_dast.w3af'
-	      sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
-	      sh 'echo cleanup >> ${env.BUILD_ID}_dast.w3af'
-	      sh 'echo start >> ${env.BUILD_ID}_dast.w3af'
+	sh 'echo output config xml_f5asm >> ${env.BUILD_ID}_dast.w3af'
+	sh 'echo set output_file ./reports/${env.BUILD_ID}_dast.xml >> ${env.BUILD_ID}_dast.w3af'
+	sh 'echo set verbose False >> ${env.BUILD_ID}_dast.w3af'
+	sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
+	sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
+	sh 'echo target >> ${env.BUILD_ID}_dast.w3af'
+	sh 'echo set target ' + params.targetURL + ' >> ${env.BUILD_ID}_dast.w3af'
+	sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
+	sh 'echo cleanup >> ${env.BUILD_ID}_dast.w3af'
+	sh 'echo start >> ${env.BUILD_ID}_dast.w3af'
    }
 
    stage('Testing') {
