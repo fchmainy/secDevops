@@ -15,7 +15,7 @@
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
             partition: "{{ partition }}"
-            name: "{{fqdn}}_asm"
+            name: "{{appName}}_asm"
             description: "This is an ASM Policy created automatically based on RDP"
             virtual: "{{appName}}_vs"
             lang: "utf-8"
