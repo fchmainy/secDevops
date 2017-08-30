@@ -20,10 +20,17 @@ def notifySlack(text, channel, attachments) {
 
 node {
    stage('Preparation') { 
-      git 'https://github.com/fchmainy/jenkinsDemo.git'
-   }
-   stage('Preparation') { 
       git 'https://github.com/fchmainy/secDevops.git'
+      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips',
+			usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+      	def userF5 = $USERNAME
+      	def passF5 = $PASSWORD
+      }
+      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ipam',
+			usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+	def userIPAM = $USERNAME
+	def passIPAM = $PASSWORD
+      }
    }
    stage('Prepare Crawling and DAST') { 
 	   steps {
