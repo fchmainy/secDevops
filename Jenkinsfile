@@ -66,7 +66,7 @@ node {
                 extras: '-vvv',
                 sudoUser: null,
                 extraVars: [
-                        host: 'qa':&$zone,
+                        host: 'qa:&$zone',
                         bigip_username: USERNAME,
                         bigip_password: PASSWORD,
                         fqdn: $fqdn,
@@ -84,7 +84,7 @@ node {
                 extras: '-vvv',
                 sudoUser: null,
                 extraVars: [
-                        host: 'qa':&$zone,
+                        host: 'qa:&$zone',
                         bigip_username: USERNAME,
                         bigip_password: PASSWORD,
                         fqdn: $fqdn,
@@ -161,7 +161,7 @@ node {
          extras: '-vvv',
          sudoUser: null,
          extraVars: [
-            host: 'qa':&$zone,
+            host: 'qa:&$zone',
             bigip_username: USERNAME,
             bigip_password: PASSWORD,
             fqdn: fqdn,
@@ -174,7 +174,7 @@ node {
          extras: '-vvv',
          sudoUser: null,
          extraVars: [
-            host: 'prod':&$zone,
+            host: 'prod:&$zone',
             bigip_username: USERNAME,
             bigip_password: PASSWORD,
             fqdn: fqdn,
@@ -187,7 +187,7 @@ node {
          extras: '-vvv',
          sudoUser: null,
          extraVars: [
-            host: 'prod':&$zone,
+            host: 'prod:&$zone',
             bigip_username: USERNAME,
             bigip_password: PASSWORD,
             fqdn: $fqdn,
@@ -203,7 +203,7 @@ node {
          extras: '-vvv',
          sudoUser: null,
          extraVars: [
-            host: 'prod':&$zone,
+            host: 'prod:&$zone',
             bigip_username: USERNAME,
             bigip_password: PASSWORD,
             fqdn: $fqdn,
@@ -216,7 +216,7 @@ node {
          extras: '-vvv',
          sudoUser: null,
          extraVars: [
-            host: 'prod':&params.zone,
+            host: 'prod:&zone',
             bigip_username: USERNAME,
             bigip_password: PASSWORD,
             fqdn: fqdn,
@@ -230,7 +230,7 @@ node {
          extras: '-vvv',
          sudoUser: null,
          extraVars: [
-            host: 'qa':&$zone,
+            host: 'prod:&$zone',
             bigip_username: USERNAME,
             bigip_password: PASSWORD,
             fqdn: $fqdn,
