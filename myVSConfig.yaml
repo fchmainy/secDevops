@@ -60,7 +60,7 @@
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
             validate_certs: "{{ validate_certs }}"
-            name: "{{fqdn}}_pool"
+            name: "{{appName}}_pool"
             monitor: "http"
         delegate_to: localhost
         register: result
