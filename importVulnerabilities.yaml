@@ -1,6 +1,6 @@
 ---
 - name: Import DAST output and resolve vulnerabilities
-  hosts: lab:&suresnes
+  hosts: all
   connection: local
 
   tasks:
