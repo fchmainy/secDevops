@@ -69,9 +69,9 @@ node {
                         host: 'qa:&$zone',
                         bigip_username: USERNAME,
                         bigip_password: PASSWORD,
-                        fqdn: $fqdn,
-                        appName: $appName,
-                        member: $member
+                        fqdn: fqdn,
+                        appName: appName,
+                        member: member
               ])
             }
        }
@@ -87,8 +87,8 @@ node {
                         host: 'qa:&$zone',
                         bigip_username: USERNAME,
                         bigip_password: PASSWORD,
-                        fqdn: $fqdn,
-                        appName: $appName
+                        fqdn: fqdn,
+                        appName: appName
                 ])
           }
        }
@@ -190,9 +190,9 @@ node {
             host: 'prod:&$zone',
             bigip_username: USERNAME,
             bigip_password: PASSWORD,
-            fqdn: $fqdn,
-            appName: $appName,
-            fileName: ${env.BUILD_ID}_dast.xml
+            fqdn: fqdn,
+            appName: appName,
+            fileName: "${env.BUILD_ID}_dast.xml"
          ])
    }
    stage('Create Service in Production') {
@@ -206,8 +206,8 @@ node {
             host: 'prod:&$zone',
             bigip_username: USERNAME,
             bigip_password: PASSWORD,
-            fqdn: $fqdn,
-            appName: $appName
+            fqdn: fqdn,
+            appName: appName
          ])
         ansiblePlaybook(
          colorized: true, 
@@ -233,8 +233,8 @@ node {
             host: 'prod:&$zone',
             bigip_username: USERNAME,
             bigip_password: PASSWORD,
-            fqdn: $fqdn,
-            appName: $appName
+            fqdn: fqdn,
+            appName: appName
          ])
    }
    stage("Post to Slack") {
