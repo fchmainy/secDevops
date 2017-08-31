@@ -64,7 +64,7 @@ node {
                 colorized: true, 
                 inventory: 'hosts.ini', 
                 playbook: 'myVSConfig.yaml', 
-                limit: 'qa:&$zone',
+                limit: 'qa:&$zone:&ipam',
                 extras: '-vvv',
                 sudoUser: null,
                 extraVars: [
@@ -212,7 +212,7 @@ node {
          colorized: true, 
          inventory: 'hosts.ini', 
          playbook: 'myVSConfig.yaml', 
-         limit: 'prod:&$zone',
+         limit: 'prod:&$zone:&$ipam',
          extras: '-vvv',
          sudoUser: null,
          extraVars: [
