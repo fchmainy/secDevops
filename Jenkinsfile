@@ -42,8 +42,8 @@ node {
 
 
       withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ipam', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-          env.userIPAM = $USERNAME
-          env.passIPAM = $PASSWORD
+          env.userIPAM = USERNAME
+          env.passIPAM = PASSWORD
       }
    }
 
