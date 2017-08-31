@@ -59,7 +59,6 @@ node {
    }
     
    stage('Build in QA') {
-       steps {
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
               ansiblePlaybook(
                 colorized: true, 
@@ -92,11 +91,9 @@ node {
                         appName: appName
                 ])
           }
-       }
-       step {
+       
            // Record the VS IP Address
            def qaIP = readFile "${env.WORKSPACE}/$appName.ip"
-       }
    }
     
    stage('Prepare Crawling and DAST') { 
