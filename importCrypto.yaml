@@ -1,6 +1,6 @@
 ---
 - name: Import Certificate and Key
-  hosts: lab:&suresnes
+  hosts: all
   connection: local
 
   tasks:
