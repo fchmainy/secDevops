@@ -1,6 +1,6 @@
 ---
 - name: Import an ASM Policy
-  hosts: lab:&suresnes
+  hosts: all
   connection: local
 
   tasks:
