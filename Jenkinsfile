@@ -26,7 +26,7 @@ node {
       env.appName = params.appName
       env.member = params.member
 
-      env.cert = params.cert
+      env.cert = params.certificate
       env.key = params.key
 
       sh 'echo $cert > $appName.cert'
