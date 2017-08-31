@@ -127,3 +127,7 @@
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
             transactionId: "{{ transId.transId }}"
+
+      - copy:
+            content: "{{ hostvars['10.128.1.154']['dynamicIPAddress'] }}"
+            dest: "./"{{appName}}.ip"
