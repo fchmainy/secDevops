@@ -20,31 +20,35 @@ def notifySlack(text, channel, attachments) {
 
 node {
    stage('Preparation') { 
-      // Setting up environment variables
-      env.zone = params.zones
-      env.fqdn = params.fqdn
-      env.appName = params.appName
-      env.member = params.member
+       step {
+            git 'https://github.com/fchmainy/secDevops.git'   
+       }
+       step {
+            // Setting up environment variables
+            env.zone = params.zones
+            env.fqdn = params.fqdn
+            env.appName = params.appName
+            env.member = params.member
 
-      env.cert = params.certificate
-      env.key = params.key
+            env.cert = params.certificate
+            env.key = params.key
 
-      sh 'echo $cert > $appName.cert'
-      sh 'echo $key > $appName.key'
+            sh 'echo $cert > $appName.cert'
+            sh 'echo $key > $appName.key'
 
-      env.targertURL = params.targetURL
-      env.loginURL = params.loginURL
-      env.method = params.method
-      env.app_user = params.usernameField
-      env.app_pass = params.passwordField
-      env.checkString = params.checkString
-      env.dataFormat = params.dataFormat
+            env.targertURL = params.targetURL
+            env.loginURL = params.loginURL
+            env.method = params.method
+            env.app_user = params.usernameField
+            env.app_pass = params.passwordField
+            env.checkString = params.checkString
+            env.dataFormat = params.dataFormat
 
-
-      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ipam', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-          env.userIPAM = USERNAME
-          env.passIPAM = PASSWORD
-      }
+            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ipam', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                env.userIPAM = USERNAME
+                env.passIPAM = PASSWORD
+            }
+       }
    }
 
    stage('Testing Ansible Playbooks') {
