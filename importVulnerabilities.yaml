@@ -30,7 +30,7 @@
         register: taskId
 
       - name: IMPORT VULNERABILITIES
-        f5_asm_importVulneabilities:
+        f5_asm_importVulnerabilities:
             connection: "rest"
             server: "{{ inventory_hostname }}"
             serviceName: "asm_{{appName}}"
