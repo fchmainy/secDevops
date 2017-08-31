@@ -92,6 +92,10 @@ node {
                 ])
           }
        }
+       step {
+           // Record the VS IP Address
+           def qaIP = readFile "${env.WORKSPACE}/$appName.ip"
+       }
    }
     
    stage('Prepare Crawling and DAST') { 
