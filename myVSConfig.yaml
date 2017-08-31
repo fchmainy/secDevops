@@ -90,7 +90,7 @@
             password: "{{ bigip_password }}"
             name: "{{appName}}_vs"
             description: "Ansible: {{ fqdn }}"
-            destination: "{{ hostvars['10.128.1.154']['dynamicIPAddress'] }}"
+            destination: "{{ hostvars['10.128.0.181']['dynamicIPAddress'] }}"
             port: "443"
             ipProtocol: "tcp"
             mask: "255.255.255.255"
@@ -129,5 +129,5 @@
             transactionId: "{{ transId.transId }}"
 
       - copy:
-            content: "{{ hostvars['10.128.1.154']['dynamicIPAddress'] }}"
+            content: "{{ hostvars['10.128.0.181']['dynamicIPAddress'] }}"
             dest: "./{{appName}}.ip"
