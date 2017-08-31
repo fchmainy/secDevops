@@ -20,7 +20,8 @@ def notifySlack(text, channel, attachments) {
 
 node {
    stage('Preparation') { 
-       step {
+            git 'https://github.com/fchmainy/secDevops.git'   
+       
             // Setting up environment variables
             echo "setting up variables..."
             env.zone = params.zones
@@ -46,11 +47,6 @@ node {
                 env.userIPAM = USERNAME
                 env.passIPAM = PASSWORD
             }
-       }
-     step {
-            echo "getting the git file"
-            git 'https://github.com/fchmainy/secDevops.git'   
-       }
    }
 
    stage('Testing Ansible Playbooks') {
