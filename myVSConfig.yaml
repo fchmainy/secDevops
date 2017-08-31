@@ -37,7 +37,7 @@
 
 
 - name: Deploy a new Service
-  hosts: lab
+  hosts: all
   connection: local
 
   tasks:
