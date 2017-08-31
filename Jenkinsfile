@@ -59,7 +59,7 @@ node {
    }
     
    stage('Build in QA') {
-       step {
+       steps {
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
               ansiblePlaybook(
                 colorized: true, 
@@ -76,8 +76,7 @@ node {
                         member: member
               ])
             }
-       }
-       step {
+           
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
             ansiblePlaybook(
                 colorized: true, 
