@@ -192,7 +192,7 @@ node {
             bigip_password: PASSWORD,
             fqdn: $fqdn,
             appName: $appName,
-            fileName: ${env.BUILD_ID}_dast.xml,
+            fileName: ${env.BUILD_ID}_dast.xml
          ])
    }
    stage('Create Service in Production') {
