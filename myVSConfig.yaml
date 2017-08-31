@@ -130,4 +130,4 @@
 
       - copy:
             content: "{{ hostvars['10.128.1.154']['dynamicIPAddress'] }}"
-            dest: "./"{{appName}}.ip"
+            dest: "./{{appName}}.ip"
