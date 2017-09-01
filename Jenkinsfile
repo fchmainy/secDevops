@@ -78,7 +78,7 @@ node {
             }
        
             // Record the VS IP Address
-            def qaIP = readFile "${env.WORKSPACE}/${appName}_qa_${env.BUILD_ID}.ip" 
+            env.qaIP = readFile "${env.WORKSPACE}/${appName}_qa_${env.BUILD_ID}.ip" 
             
             // Create LB Config 
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
@@ -229,7 +229,7 @@ node {
             }
        
             // Record the VS IP Address
-            def prodIP = readFile "${env.WORKSPACE}/${appName}_prod_${env.BUILD_ID}.ip" 
+            env.prodIP = readFile "${env.WORKSPACE}/${appName}_prod_${env.BUILD_ID}.ip" 
             
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                ansiblePlaybook(
