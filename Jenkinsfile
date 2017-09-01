@@ -36,7 +36,7 @@ node {
             sh 'echo $key > $appName.key'
 
             env.targertURL = params.targetURL
-            env.loginURL = params.loginURL
+            env.loginURL = params.authenticationURL
             env.method = params.method
             env.app_user = params.usernameField
             env.app_pass = params.passwordField
