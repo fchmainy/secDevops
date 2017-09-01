@@ -36,4 +36,4 @@
            dynamicIPAddress: "{{ myIP.ipAddress }}"
       - copy:
             content: "{{ myIP.ipAddress }}"
-            dest: "{{ outFile }}"
+            dest: "{{ outputFile }}"
