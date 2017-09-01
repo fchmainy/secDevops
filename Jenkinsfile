@@ -78,7 +78,7 @@ node {
             }
        
             // Record the VS IP Address
-            def qaIP = readFile "{env.WORKSPACE}/${appName}_qa_${env.BUILD_ID}.ip" 
+            def qaIP = readFile "${env.WORKSPACE}/${appName}_qa_${env.BUILD_ID}.ip" 
             
             // Create LB Config 
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
