@@ -118,7 +118,6 @@ node {
    }
     
    stage('Prepare Crawling and DAST') { 
-       step {
         sh 'cp base_crawl.w3af >> ${env.BUILD_ID}_crawl.w3af'
         sh 'echo auth detailed >> ${env.BUILD_ID}_auth.tmp'
         sh 'echo auth config detailed >> ${env.BUILD_ID}_auth.tmp'
@@ -138,8 +137,7 @@ node {
         sh 'echo cleanup >> ${env.BUILD_ID}_auth.tmp'
         sh 'echo start >> ${env.BUILD_ID}_auth.tmp'
         sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_crawl.w3af'
-    }
-    step { 
+
         sh 'cp base_dast.w3af >> ${env.BUILD_ID}_dast.w3af'
         sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_dast.w3af'
         sh 'echo output console,xml_f5asm >> ${env.BUILD_ID}_dast.w3af'
@@ -153,19 +151,13 @@ node {
         sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
         sh 'echo cleanup >> ${env.BUILD_ID}_dast.w3af'
         sh 'echo start >> ${env.BUILD_ID}_dast.w3af'
-    }
    } 
     
-   stage('Crawling') {
-      step {
+   stage('Crawling & Vulnerability Scan') {
         // Crawling
         sh "sudo ./w3af_console --no-update -s ${env.BUILD_ID}_crawl.w3af"
-      }
-      step {
         // Vulnerability Assessment
         sh "sudo ./w3af_console --no-update -s ${env.BUILD_ID}_dast.w3af"
-      }
-      
    }
 
    stage('Approval') {
