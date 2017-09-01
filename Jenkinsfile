@@ -118,8 +118,8 @@ node {
    }
     
    stage('Prepare Crawling and DAST') { 
-        sh 'cp base_crawl.w3af >> ${env.BUILD_ID}_crawl.w3af'
-        sh 'echo auth detailed >> ${env.BUILD_ID}_auth.tmp'
+        sh "cp base_crawl.w3af >> ${env.BUILD_ID}_crawl.w3af"
+        sh "echo auth detailed >> ${env.BUILD_ID}_auth.tmp"
         sh 'echo auth config detailed >> ${env.BUILD_ID}_auth.tmp'
         sh 'echo set username $app_user >> ${env.BUILD_ID}_auth.tmp'
         sh 'echo set password $app_pass >> ${env.BUILD_ID}_auth.tmp'
