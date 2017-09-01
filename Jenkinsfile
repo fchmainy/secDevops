@@ -118,39 +118,39 @@ node {
    }
     
    stage('Prepare Crawling and DAST') { 
-        sh "cp base_crawl.w3af >> ${env.BUILD_ID}_crawl.w3af"
+        sh "cp base_crawl.w3af ${env.BUILD_ID}_crawl.w3af"
         sh "echo auth detailed >> ${env.BUILD_ID}_auth.tmp"
-        sh 'echo auth config detailed >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo set username $app_user >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo set password $app_pass >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo set method $method >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo set auth_url https://$qaIP$loginURL >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo set username_field $app_user >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo set password_field $app_pass >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo set check_url https://$qaIP$targetURL >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo set check_string $checkString >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo set data_format $dataFormat >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo back >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo target >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo set target https://$qaIP$targetURL >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo back >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo cleanup >> ${env.BUILD_ID}_auth.tmp'
-        sh 'echo start >> ${env.BUILD_ID}_auth.tmp'
-        sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_crawl.w3af'
+        sh "echo auth config detailed >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo set username $app_user >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo set password $app_pass >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo set method $method >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo set auth_url https://$qaIP$loginURL >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo set username_field $app_user >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo set password_field $app_pass >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo set check_url https://$qaIP$targetURL >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo set check_string $checkString >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo set data_format $dataFormat >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo back >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo target >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo set target https://$qaIP$targetURL >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo back >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo cleanup >> ${env.BUILD_ID}_auth.tmp'
+        sh "echo start >> ${env.BUILD_ID}_auth.tmp'
+        sh "cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_crawl.w3af'
 
-        sh 'cp base_dast.w3af >> ${env.BUILD_ID}_dast.w3af'
-        sh 'cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo output console,xml_f5asm >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo output config xml_f5asm >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo set output_file ${env.BUILD_ID}_dast.xml >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo set verbose False >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo target >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo set target https://$qaIP$targetURL >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo back >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo cleanup >> ${env.BUILD_ID}_dast.w3af'
-        sh 'echo start >> ${env.BUILD_ID}_dast.w3af'
+        sh "cp base_dast.w3af ${env.BUILD_ID}_dast.w3af"
+        sh "cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo output console,xml_f5asm >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo output config xml_f5asm >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo set output_file ${env.BUILD_ID}_dast.xml >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo set verbose False >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo back >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo back >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo target >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo set target https://$qaIP$targetURL >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo back >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo cleanup >> ${env.BUILD_ID}_dast.w3af"
+        sh "echo start >> ${env.BUILD_ID}_dast.w3af"
    } 
     
    stage('Crawling & Vulnerability Scan') {
