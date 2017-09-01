@@ -59,12 +59,34 @@ node {
    }
     
    stage('Build in QA') {
+            // Request IP Address for IPAM
+            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ipam', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+              ansiblePlaybook(
+                colorized: true, 
+                inventory: 'hosts.ini', 
+                playbook: 'getIP.yaml', 
+                limit: 'ipam',
+                extras: '-vvv',
+                sudoUser: null,
+                extraVars: [
+                        username: USERNAME,
+                        password: PASSWORD,
+                        fqdn: fqdn,
+                        outputFile: "${env.WORKSPACE}/$appName_qa_${env.BUILD_ID}.ip",
+                        member: member
+              ])
+            }
+       
+            // Record the VS IP Address
+            def qaIP = readFile "{env.WORKSPACE}/$appName_qa_${env.BUILD_ID}.ip" 
+            
+            // Create LB Config 
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
               ansiblePlaybook(
                 colorized: true, 
                 inventory: 'hosts.ini', 
                 playbook: 'myVSConfig.yaml', 
-                limit: 'qa:&$zone:&ipam',
+                limit: 'qa:&$zone',
                 extras: '-vvv',
                 sudoUser: null,
                 extraVars: [
@@ -72,6 +94,7 @@ node {
                         bigip_password: PASSWORD,
                         fqdn: fqdn,
                         appName: appName,
+                        vsIP: qaIP,
                         member: member
               ])
             }
@@ -92,8 +115,6 @@ node {
                 ])
           }
        
-           // Record the VS IP Address
-           def qaIP = readFile "${env.WORKSPACE}/$appName.ip"
    }
     
    stage('Prepare Crawling and DAST') { 
@@ -152,89 +173,115 @@ node {
    }
 
    stage('Export WAF Policy and resolve vulnerabilities') {
-       ansiblePlaybook(
-         colorized: true, 
-         inventory: 'hosts.ini', 
-         playbook: 'exportPolicy.yaml', 
-         limit: 'qa:&$zone',
-         extras: '-vvv',
-         sudoUser: null,
-         extraVars: [
-            bigip_username: USERNAME,
-            bigip_password: PASSWORD,
-            fqdn: fqdn,
-            appName: appName
-         ])
-       ansiblePlaybook(
-         colorized: true, 
-         inventory: 'hosts.ini', 
-         playbook: 'importPolicy.yaml', 
-         limit: 'prod:&$zone',
-         extras: '-vvv',
-         sudoUser: null,
-         extraVars: [
-            host: 'prod:&$zone',
-            bigip_username: USERNAME,
-            bigip_password: PASSWORD,
-            fqdn: fqdn,
-            appName: appName
-         ])
-       ansiblePlaybook(
-         colorized: true, 
-         inventory: 'hosts.ini', 
-         playbook: 'importVulnerabilities.yaml', 
-         limit: 'prod:&$zone',
-         extras: '-vvv',
-         sudoUser: null,
-         extraVars: [
-            bigip_username: USERNAME,
-            bigip_password: PASSWORD,
-            fqdn: fqdn,
-            appName: appName,
-            fileName: "${env.BUILD_ID}_dast.xml"
-         ])
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+            ansiblePlaybook(
+                colorized: true, 
+                inventory: 'hosts.ini', 
+                playbook: 'exportPolicy.yaml', 
+                limit: 'qa:&$zone',
+                extras: '-vvv',
+                sudoUser: null,
+                extraVars: [
+                    bigip_username: USERNAME,
+                    bigip_password: PASSWORD,
+                    fqdn: fqdn,
+                    appName: appName
+                ])
+            ansiblePlaybook(
+                colorized: true, 
+                inventory: 'hosts.ini', 
+                playbook: 'importPolicy.yaml', 
+                limit: 'prod:&$zone',
+                extras: '-vvv',
+                sudoUser: null,
+                extraVars: [
+                    host: 'prod:&$zone',
+                    bigip_username: USERNAME,
+                    bigip_password: PASSWORD,
+                    fqdn: fqdn,
+                    appName: appName
+                ])
+            ansiblePlaybook(
+                colorized: true, 
+                inventory: 'hosts.ini', 
+                playbook: 'importVulnerabilities.yaml', 
+                limit: 'prod:&$zone',
+                extras: '-vvv',
+                sudoUser: null,
+                extraVars: [
+                    bigip_username: USERNAME,
+                    bigip_password: PASSWORD,
+                    fqdn: fqdn,
+                    appName: appName,
+                    fileName: "${env.BUILD_ID}_dast.xml"
+            ])
+        }
    }
    stage('Create Service in Production') {
-       ansiblePlaybook(
-         colorized: true, 
-         inventory: 'hosts.ini', 
-         playbook: 'importCrypto.yaml', 
-         limit: 'prod:&$zone',
-         extras: '-vvv',
-         sudoUser: null,
-         extraVars: [
-            bigip_username: USERNAME,
-            bigip_password: PASSWORD,
-            fqdn: fqdn,
-            appName: appName
-         ])
-        ansiblePlaybook(
-         colorized: true, 
-         inventory: 'hosts.ini', 
-         playbook: 'myVSConfig.yaml', 
-         limit: 'prod:&$zone:&$ipam',
-         extras: '-vvv',
-         sudoUser: null,
-         extraVars: [
-            bigip_username: USERNAME,
-            bigip_password: PASSWORD,
-            fqdn: fqdn,
-            appName: appName,
-            member: member
-         ])
-       ansiblePlaybook(
-         colorized: true, 
-         inventory: 'hosts.ini', 
-         playbook: 'createASMPolicy.yaml', 
-         limit: 'prod:&$zone',
-         extras: '-vvv',
-         sudoUser: null,
-         extraVars: [
-            bigip_username: USERNAME,
-            bigip_password: PASSWORD,
-            fqdn: fqdn,
-            appName: appName
-         ])
+            // Request IP Address for IPAM
+            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ipam', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+              ansiblePlaybook(
+                colorized: true, 
+                inventory: 'hosts.ini', 
+                playbook: 'getIP.yaml', 
+                limit: 'ipam',
+                extras: '-vvv',
+                sudoUser: null,
+                extraVars: [
+                        username: USERNAME,
+                        password: PASSWORD,
+                        fqdn: fqdn,
+                        outputFile: "${env.WORKSPACE}/$appName_prod_${env.BUILD_ID}.ip",
+                        member: member
+              ])
+            }
+       
+            // Record the VS IP Address
+            def prodIP = readFile "${env.WORKSPACE}/$appName_prod_${env.BUILD_ID}.ip" 
+            
+            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+               ansiblePlaybook(
+                    colorized: true, 
+                    inventory: 'hosts.ini', 
+                    playbook: 'importCrypto.yaml', 
+                    limit: 'prod:&$zone',
+                    extras: '-vvv',
+                    sudoUser: null,
+                    extraVars: [
+                        bigip_username: USERNAME,
+                        bigip_password: PASSWORD,
+                        fqdn: fqdn,
+                        appName: appName
+                ])
+                ansiblePlaybook(
+                    colorized: true, 
+                    inventory: 'hosts.ini', 
+                    playbook: 'myVSConfig.yaml', 
+                    limit: 'prod:&$zone:&$ipam',
+                    extras: '-vvv',
+                    sudoUser: null,
+                    extraVars: [
+                        bigip_username: USERNAME,
+                        bigip_password: PASSWORD,
+                        fqdn: fqdn,
+                        vsIP: prodIP,
+                        appName: appName,
+                        member: member
+                ])
+                ansiblePlaybook(
+                    colorized: true, 
+                    inventory: 'hosts.ini', 
+                    playbook: 'attachASMPolicy.yaml', 
+                    limit: 'prod:&$zone',
+                    extras: '-vvv',
+                    sudoUser: null,
+                    extraVars: [
+                        bigip_username: USERNAME,
+                        bigip_password: PASSWORD,
+                        fqdn: fqdn,
+                        appName: appName
+                ])
+            }
    }
    stage("Post to Slack") {
         notifySlack("A new service is deployed!", slackNotificationChannel, [])
