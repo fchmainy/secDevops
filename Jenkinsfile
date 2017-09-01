@@ -72,13 +72,13 @@ node {
                         username: USERNAME,
                         password: PASSWORD,
                         fqdn: fqdn,
-                        outputFile: "${env.WORKSPACE}/$appName_qa_${env.BUILD_ID}.ip",
+                        outputFile: "${env.WORKSPACE}/${appName}_qa_${env.BUILD_ID}.ip",
                         member: member
               ])
             }
        
             // Record the VS IP Address
-            def qaIP = readFile "{env.WORKSPACE}/$appName_qa_${env.BUILD_ID}.ip" 
+            def qaIP = readFile "{env.WORKSPACE}/${appName}_qa_${env.BUILD_ID}.ip" 
             
             // Create LB Config 
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
@@ -231,13 +231,13 @@ node {
                         username: USERNAME,
                         password: PASSWORD,
                         fqdn: fqdn,
-                        outputFile: "${env.WORKSPACE}/$appName_prod_${env.BUILD_ID}.ip",
+                        outputFile: "${env.WORKSPACE}/${appName}_prod_${env.BUILD_ID}.ip",
                         member: member
               ])
             }
        
             // Record the VS IP Address
-            def prodIP = readFile "${env.WORKSPACE}/$appName_prod_${env.BUILD_ID}.ip" 
+            def prodIP = readFile "${env.WORKSPACE}/${appName}_prod_${env.BUILD_ID}.ip" 
             
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                ansiblePlaybook(
