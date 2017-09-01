@@ -1,0 +1,39 @@
+---
+- name: Get an IP Address and reserve it on the IPAM
+  hosts: ipam
+  connection: local
+
+  tasks:
+      - name: include Variables
+        include_vars: 'myVariables.yaml'
+      - name: Get a New Token
+        phpipam_getToken:
+           ipam: "{{ inventory_hostname }}"
+           user: "{{ user }}"
+           password: "{{ password }}"
+        register: myToken
+
+      - name: get Next Available IP Address
+        phpipam_getNextIP:
+           ipam: "{{ inventory_hostname }}"
+           user: "{{ user }}"
+           password: "{{ password }}"
+           tenant: "{{ tenant }}"
+           token: "{{ myToken.tokenId }}"
+        register: myIP
+
+      - name: reserve the Next Available IP Address
+        phpipam_reserveNextIP:
+           ipam: "{{ inventory_hostname }}"
+           user: "{{ user }}"
+           password: "{{ password }}"
+           tenant: "{{ tenant }}"
+           token: "{{ myToken.tokenId }}"
+           fqdn: "{{ fqdn }}"
+           ipAddress: "{{ myIP.ipAddress }}"
+
+      - set_fact:
+           dynamicIPAddress: "{{ myIP.ipAddress }}"
+      - copy:
+            content: "{{ myIP.ipAddress }}"
+            dest: "{{ outFile }}"
