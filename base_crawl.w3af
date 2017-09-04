@@ -25,6 +25,6 @@ output console
 output config console
 set verbose True
 back
-back
+
 #Set target informations, do a cleanup and run the scan
-~                                                          
+                                                          
