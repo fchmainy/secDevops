@@ -131,6 +131,7 @@ node {
         sh "echo set check_string $checkString >> ${env.BUILD_ID}_auth.tmp"
         sh "echo set data_format $dataFormat >> ${env.BUILD_ID}_auth.tmp"
         sh "echo back >> ${env.BUILD_ID}_auth.tmp"
+        sh "echo back >> ${env.BUILD_ID}_auth.tmp"
         sh "echo target >> ${env.BUILD_ID}_auth.tmp"
         sh "echo set target https://$qaIP$targetURL >> ${env.BUILD_ID}_auth.tmp"
         sh "echo back >> ${env.BUILD_ID}_auth.tmp"
