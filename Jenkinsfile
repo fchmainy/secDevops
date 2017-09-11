@@ -156,7 +156,7 @@ node {
     
    stage('Crawling & Vulnerability Scan') {
         // Crawling
-        sh "/opt/w3af/w3af_console --no-update -s ${env.BUILD_ID}_crawl.w3af"
+        //sh "/opt/w3af/w3af_console --no-update -s ${env.BUILD_ID}_crawl.w3af"
         // Vulnerability Assessment
         sh "/opt/w3af/w3af_console --no-update -s ${env.BUILD_ID}_dast.w3af"
    }
