@@ -1,30 +1,12 @@
-# -----------------------------------------------------------------------------------------------------------
-#                                              W3AF AUDIT SCRIPT FOR WEB APPLICATION
-# -----------------------------------------------------------------------------------------------------------
-#Configure HTTP settings
 http-settings
 set timeout 30
 back
-#Configure scanner global behaviors
 misc-settings
-set max_discovery_time 2
+set max_discovery_time 3
 back
-
-profiles use fast_scan
-
 plugins
-#Configure entry point (CRAWLING) scanner
 crawl web_spider
 crawl config web_spider
 set only_forward False
 set ignore_regex (?i)(logout|disconnect|signout|exit)+
-back
-
-#Configure reporting in order to generate an HTML report
-output console
-output config console
-set verbose True
-back
-
-#Set target informations, do a cleanup and run the scan
-                                                          
+back                                                   
