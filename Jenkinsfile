@@ -144,7 +144,6 @@ node {
         sh "echo cleanup >> ${env.BUILD_ID}_crawl.w3af"
         sh "echo start >> ${env.BUILD_ID}_crawl.w3af"
 
-        sh "cp base_crawl.w3af ${env.BUILD_ID}_dast.w3af"
         sh "cat base_dast.w3af >> ${env.BUILD_ID}_dast.w3af"
         sh "cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_dast.w3af"
         sh "echo output console,xml_f5asm >> ${env.BUILD_ID}_dast.w3af"
