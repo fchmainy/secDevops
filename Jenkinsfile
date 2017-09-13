@@ -26,7 +26,7 @@ node {
             echo "setting up variables..."
             env.zone = params.zones
             env.fqdn = params.fqdn
-            env.domain = fqdn.split('.').last(2).join('.')
+           // env.domain = fqdn.split('.').last(2).join('.')
             env.appName = params.appName
             env.member = params.member
 
