@@ -3,6 +3,7 @@ set timeout 30
 back
 misc-settings
 set max_discovery_time 3
+local_ip_address  10.128.0.180
 back
 plugins
 crawl web_spider
