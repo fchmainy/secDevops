@@ -6,7 +6,7 @@ set timeout 30
 back
 misc-settings
 set max_discovery_time 3
-local_ip_address  10.128.0.181
+local_ip_address  10.128.0.182
 back
 plugins
 #audit blind_sqli, buffer_overflow, cors_origin, csrf, eval, file_upload, ldapi, lfi, os_commanding, phishing_vector, redos, response_splitting, sqli, xpath, xss, xst
