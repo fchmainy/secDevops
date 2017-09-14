@@ -43,6 +43,8 @@ node {
             env.app_pass = params.passwordField
             env.checkString = params.checkString
             env.dataFormat = params.dataFormat
+       
+            echo "Data Format: $dataFormat"
 
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ipam', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 env.userIPAM = USERNAME
