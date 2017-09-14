@@ -45,6 +45,7 @@ node {
             env.dataFormat = params.dataFormat
        
             echo "Data Format: $dataFormat"
+            echo "Data_Format: ${dataFormat}"
 
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ipam', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 env.userIPAM = USERNAME
