@@ -38,9 +38,9 @@
             validate_certs: "{{ validate_certs }}"
             partition: "{{partition}}"
             pool: "{{appName}}_pool"
-            name: "{{appName}}_member"
+            name: "{{appName}}_member_{{memberPort}}"
             address: "{{ member }}"
-            port: "80"
+            port: "{{memberPort}}"
         delegate_to: localhost
         register: result
 
