@@ -73,7 +73,7 @@ node {
                 extras: '-vvv',
                 sudoUser: null,
                 extraVars: [
-                        username: USERNAME,
+                        user: USERNAME,
                         password: PASSWORD,
                         fqdn: fqdn,
                         outputFile: "${env.WORKSPACE}/${appName}_qa_${env.BUILD_ID}.ip",
@@ -230,7 +230,7 @@ node {
                 extras: '-vvv',
                 sudoUser: null,
                 extraVars: [
-                        username: USERNAME,
+                        user: USERNAME,
                         password: PASSWORD,
                         fqdn: fqdn,
                         outputFile: "${env.WORKSPACE}/${appName}_prod_${env.BUILD_ID}.ip",
