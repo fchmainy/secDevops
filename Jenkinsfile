@@ -54,19 +54,19 @@ node {
    }
    
    stage('certificate validation') {
-        sh "echo $key >> /tmp/${env.BUILD_ID}.key.tmp"
-        sh "echo $cert >> /tmp/${env.BUILD_ID}.cert.tmp"
+        sh "echo $key > ${env.BUILD_ID}.key.tmp"
+        sh "echo $cert > ${env.BUILD_ID}.cert.tmp"
               
-        sh "cat /tmp/${env.BUILD_ID}.key.tmp | tr ' ' '\n' | awk '/BEGIN\$/ { printf(\"%s \", \$0); next } 1' | awk '/PRIVATE\$/ { printf(\"%s \", \$0); next } 1' | awk '/END\$/ { printf(\"%s \", \$0); next } 1' |  tee -a /tmp/${env.BUILD_ID}.key"
-        sh "cat /tmp/${env.BUILD_ID}.cert.tmp | tr ' ' '\n' | awk '/BEGIN\$/ { printf(\"%s \", \$0); next } 1' | awk '/END\$/ { printf(\"%s \", \$0); next } 1' |  tee -a /tmp/${env.BUILD_ID}.cert"
+        sh "cat ${env.BUILD_ID}.key.tmp | tr ' ' '\n' | awk '/BEGIN\$/ { printf(\"%s \", \$0); next } 1' | awk '/PRIVATE\$/ { printf(\"%s \", \$0); next } 1' | awk '/END\$/ { printf(\"%s \", \$0); next } 1' |  tee -a /tmp/${appName}.key"
+        sh "cat ${env.BUILD_ID}.cert.tmp | tr ' ' '\n' | awk '/BEGIN\$/ { printf(\"%s \", \$0); next } 1' | awk '/END\$/ { printf(\"%s \", \$0); next } 1' |  tee -a ${appName}.cert"
       
         // Verify if Key and Certificate modulus match
         def cert_mod = sh (
-                script: "openssl x509 -noout -modulus -in /tmp/${env.BUILD_ID}.cert",
+                script: "openssl x509 -noout -modulus -in ${appName}.cert",
                 returnStatus: true
             ) == 0
         def key_mod = sh (
-                script: "openssl rsa -noout -modulus -in /tmp/${env.BUILD_ID}.key",
+                script: "openssl rsa -noout -modulus -in ${appName}.key",
                 returnStatus: true
             ) == 0
         if( "${cert_mod}" != "${key_mod}" ) {
@@ -142,7 +142,11 @@ node {
           }
        
    }
-    
+   
+   stage('1st Approval') {
+      input 'Proceed to Intensive tests in QA?'
+   }
+        
    stage('Prepare Crawling and DAST') { 
         sh "cp base_crawl.w3af ${env.BUILD_ID}_crawl.w3af"
         sh "echo auth detailed >> ${env.BUILD_ID}_auth.tmp"
@@ -192,7 +196,7 @@ node {
         sh "/opt/w3af/w3af_console --no-update -s ${env.BUILD_ID}_dast.w3af"
    }
 
-   stage('Approval') {
+   stage('2nd Approval') {
       input 'Proceed to Production?'
    }
 
