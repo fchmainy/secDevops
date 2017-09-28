@@ -52,7 +52,29 @@ node {
                 env.passIPAM = PASSWORD
             }
    }
-
+   
+   stage('certificate validation') {
+        sh "echo $key >> /tmp/${env.BUILD_ID}.key.tmp"
+        sh "echo $cert >> /tmp/${env.BUILD_ID}.cert.tmp"
+              
+        sh "cat /tmp/${env.BUILD_ID}.key.tmp | tr ' ' '\n' | awk '/BEGIN\$/ { printf(\"%s \", \$0); next } 1' | awk '/PRIVATE\$/ { printf(\"%s \", \$0); next } 1' | awk '/END\$/ { printf(\"%s \", \$0); next } 1' |  tee -a /tmp/${env.BUILD_ID}.key"
+        sh "cat /tmp/${env.BUILD_ID}.cert.tmp | tr ' ' '\n' | awk '/BEGIN\$/ { printf(\"%s \", \$0); next } 1' | awk '/END\$/ { printf(\"%s \", \$0); next } 1' |  tee -a /tmp/${env.BUILD_ID}.cert"
+      
+        // Verify if Key and Certificate modulus match
+        def cert_mod = sh (
+                script: "openssl x509 -noout -modulus -in /tmp/${env.BUILD_ID}.cert",
+                returnStatus: true
+            ) == 0
+        def key_mod = sh (
+                script: "openssl rsa -noout -modulus -in /tmp/${env.BUILD_ID}.key",
+                returnStatus: true
+            ) == 0
+        if( "${cert_mod}" != "${key_mod}" ) {
+            echo '[FAILURE] Failed to build'
+            currentBuild.result = 'FAILURE'
+            }
+   }  
+    
    stage('Testing Ansible Playbooks') {
       //sh "/usr/local/bin/ansible-lint myLab.yaml"
       sh "/usr/local/bin/ansible-review myVSConfig.yaml"
@@ -133,7 +155,7 @@ node {
         sh "echo set password_field $app_pass >> ${env.BUILD_ID}_auth.tmp"
         sh "echo set check_url https://$qaIP$targetURL >> ${env.BUILD_ID}_auth.tmp"
         sh "echo set check_string $checkString >> ${env.BUILD_ID}_auth.tmp"
-        sh "echo set data_format $dataFormat >> ${env.BUILD_ID}_auth.tmp"
+        sh "echo set data_format '$dataFormat' >> ${env.BUILD_ID}_auth.tmp"
         sh "echo back >> ${env.BUILD_ID}_auth.tmp"
         sh "cat ${env.BUILD_ID}_auth.tmp >> ${env.BUILD_ID}_crawl.w3af"
         sh "echo output console >> ${env.BUILD_ID}_crawl.w3af"
