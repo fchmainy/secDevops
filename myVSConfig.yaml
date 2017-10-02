@@ -70,7 +70,7 @@
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
             virtual: "{{appName}}_vs"
-            name: "clientssl"
+            name: "{{appName}}_SSLProfile"
             context: "clientside"
 
       - name: Attach an HTTP Profile to Virtual
