@@ -11,7 +11,7 @@
         f5_uploadFile:
             connection: "rest"
             server: "{{ inventory_hostname }}"
-            fileName: "/tmp/asm_{{appName}}.xml"
+            fileName: "/tmp/{{ appName }}_asm.xml"
             fileType: "policy"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
