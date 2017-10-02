@@ -166,7 +166,7 @@ node {
   stage('Prepare Crawling and DAST') { 
         //1. Convert the dataformat line so it can used by wget for crawling
         env.wget_dataFormat = sh (
-         script: "echo 'username=%U&password=%P&Login=Login' | sed 's/%U/${myName}/g' | sed 's/%P/${myGender}/g'",
+         script: "echo 'username=%U&password=%P&Login=Login' | sed 's/%U/${app_user}/g' | sed 's/%P/${app_pass}/g'",
          returnStdout: true
          ).trim()
 
