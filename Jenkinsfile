@@ -121,6 +121,7 @@ node {
                         fqdn: fqdn,
                         appName: appName
                 ])
+            }
                 
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
               ansiblePlaybook(
