@@ -21,7 +21,7 @@
         f5_asm_exportPolicy:
             connection: "rest"
             server: "{{ inventory_hostname }}"
-            serviceName: "asm_{{appName}}"
+            serviceName: "{{ appName }}_asm"
             policyId: "{{policyId.policyId}}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
@@ -49,7 +49,7 @@
         f5_asm_getExportedPolicy:
             connection: "rest"
             server: "{{ inventory_hostname }}"
-            serviceName: "asm_{{appName}}"
+            serviceName: "{{ appName }}_asm"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
             validate_certs: "{{ validate_certs }}"
