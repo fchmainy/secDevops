@@ -1,6 +1,6 @@
 ---
 - name: Export an ASM Policy and write it locally to an XML file
-  hosts: lab:&suresnes
+  hosts: all
   connection: local
 
   tasks:
