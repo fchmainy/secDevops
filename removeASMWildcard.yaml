@@ -1,0 +1,45 @@
+---
+- name: Remove ASM Policy Policy Builder entity wildcards
+  hosts: all
+  connection: local
+
+  tasks:
+      - name: include Variables
+        include_vars: 'myVariables.yaml'
+        
+      - name: GET ASM POLICY ID
+        f5_asm_getPolicyID:
+            server: "{{ inventory_hostname }}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            policyName: "{{ appName }}_asm"
+            validate_certs: "{{ validate_certs }}"
+        register: policyId
+#        no_log: true
+
+      - name: REMOVE URLS WILDCARD
+        f5_asm_removeWildcards:
+            server: "{{ inventory_hostname }}"
+            entity: "urls"
+            policyId: "{{ policyId.policyId }}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+
+      - name: REMOVE PARAMETERS WILDCARD
+        f5_asm_removeWildcards:
+            server: "{{ inventory_hostname }}"
+            entity: "parameters"
+            policyId: "{{ policyId.policyId }}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+
+      - name: REMOVE FILETYPES WILDCARD
+        f5_asm_removeWildcards:
+            server: "{{ inventory_hostname }}"
+            entity: "filetypes"
+            policyId: "{{ policyId.policyId }}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
