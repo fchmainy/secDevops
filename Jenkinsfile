@@ -217,6 +217,18 @@ node {
             ansiblePlaybook(
                 colorized: true, 
                 inventory: 'hosts.ini', 
+                playbook: 'removeASMWildcard.yaml', 
+                limit: 'qa:&$zone',
+                extras: '-vvv',
+                sudoUser: null,
+                extraVars: [
+                    bigip_username: USERNAME,
+                    bigip_password: PASSWORD,
+                    appName: appName
+                ])
+            ansiblePlaybook(
+                colorized: true, 
+                inventory: 'hosts.ini', 
                 playbook: 'exportPolicy.yaml', 
                 limit: 'qa:&$zone',
                 extras: '-vvv',
@@ -318,7 +330,6 @@ node {
                     extraVars: [
                         bigip_username: USERNAME,
                         bigip_password: PASSWORD,
-                        fqdn: fqdn,
                         appName: appName
                 ])
             }
