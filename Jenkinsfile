@@ -226,6 +226,20 @@ node {
                     bigip_password: PASSWORD,
                     appName: appName
                 ])
+             ansiblePlaybook(
+                colorized: true, 
+                inventory: 'hosts.ini', 
+                playbook: 'importVulnerabilities.yaml', 
+                limit: 'qa:&$zone',
+                extras: '-vvv',
+                sudoUser: null,
+                extraVars: [
+                    bigip_username: USERNAME,
+                    bigip_password: PASSWORD,
+                    fqdn: fqdn,
+                    appName: appName,
+                    fileName: "${env.BUILD_ID}_dast.xml"
+            ])
             ansiblePlaybook(
                 colorized: true, 
                 inventory: 'hosts.ini', 
@@ -253,20 +267,6 @@ node {
                     fqdn: fqdn,
                     appName: appName
                 ])
-            ansiblePlaybook(
-                colorized: true, 
-                inventory: 'hosts.ini', 
-                playbook: 'importVulnerabilities.yaml', 
-                limit: 'prod:&$zone',
-                extras: '-vvv',
-                sudoUser: null,
-                extraVars: [
-                    bigip_username: USERNAME,
-                    bigip_password: PASSWORD,
-                    fqdn: fqdn,
-                    appName: appName,
-                    fileName: "${env.BUILD_ID}_dast.xml"
-            ])
         }
    }
    stage('Create Service in Production') {
