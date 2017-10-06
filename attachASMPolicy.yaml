@@ -12,7 +12,7 @@
             server: "{{ inventory_hostname }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
-            policyName: "{{ appName }}_asm"
+            policyName: "asm_tested_{{ appName }}"
             validate_certs: "{{ validate_certs }}"
         register: policyId
 #        no_log: true
@@ -22,7 +22,7 @@
             partition: "Common"
             server: "{{ inventory_hostname }}"
             virtual: "{{ appName }}_vs"
-            policyId: "{{policyId.policyId}}"
+            policyId: "{{ policyId.policyId }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
             validate_certs: "{{ validate_certs }}"
