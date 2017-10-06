@@ -12,7 +12,7 @@
             server: "{{ inventory_hostname }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
-            policyName: "asm_{{appName}}"
+            policyName: "{{ appName }}_asm"
             validate_certs: "{{ validate_certs }}"
         register: policyId
 #        no_log: true
@@ -33,8 +33,8 @@
         f5_asm_importVulnerabilities:
             connection: "rest"
             server: "{{ inventory_hostname }}"
-            serviceName: "asm_{{appName}}"
-            policyId: "{{policyId.policyId}}"
+            serviceName: "{{ appName }}_asm"
+            policyId: "{{ policyId.policyId }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
             validate_certs: "{{ validate_certs }}"
@@ -46,7 +46,7 @@
         f5_asm_getStatus:
             connection: "rest"
             server: "{{ inventory_hostname }}"
-            taskId: "{{taskId.exportTask}}"
+            taskId: "{{ taskId.exportTask }}"
             taskType: "import-vulnerabilities"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
@@ -61,7 +61,7 @@
         f5_asm_collectVulnerabilities:
             connection: "rest"
             server: "{{ inventory_hostname }}"
-            policyId: "{{policyId.policyId}}"
+            policyId: "{{ policyId.policyId }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
             validate_certs: "{{ validate_certs }}"
@@ -74,7 +74,7 @@
             connection: "rest"
             server: "{{ inventory_hostname }}"
             vulnerabilities: "{{ vulnsArray.vulnerabilities }}"
-            policyId: "{{policyId.policyId}}"
+            policyId: "{{ policyId.policyId }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
             validate_certs: "{{ validate_certs }}"
@@ -86,7 +86,7 @@
         f5_asm_getStatus:
             connection: "rest"
             server: "{{ inventory_hostname }}"
-            taskId: "{{taskId.resolveId}}"
+            taskId: "{{ taskId.resolveId }}"
             taskType: "resolve-vulnerabilities"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
