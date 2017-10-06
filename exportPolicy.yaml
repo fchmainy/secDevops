@@ -12,7 +12,7 @@
             server: "{{ inventory_hostname }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
-            policyName: "asm_{{appName}}"
+            policyName: "{{ appName }}_asm"
             validate_certs: "{{ validate_certs }}"
         register: policyId
 #        no_log: true
