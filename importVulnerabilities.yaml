@@ -46,7 +46,7 @@
         f5_asm_getStatus:
             connection: "rest"
             server: "{{ inventory_hostname }}"
-            taskId: "{{ taskId.exportTask }}"
+            taskId: "{{ taskId.importTask }}"
             taskType: "import-vulnerabilities"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
