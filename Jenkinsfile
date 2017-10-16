@@ -159,9 +159,9 @@ node {
        
    }
    
-   stage('1st Approval') {
-      input 'Proceed to Intensive tests in QA?'
-   }
+   //stage('1st Approval') {
+   //   input 'Proceed to Intensive tests in QA?'
+   //}
         
   stage('Prepare Crawling and DAST') { 
         //1. Convert the dataformat line so it can used by wget for crawling
@@ -208,9 +208,9 @@ node {
         sh "/opt/w3af/w3af_console --no-update -s ${env.BUILD_ID}_dast.w3af"
    }
 
-   stage('2nd Approval') {
-      input 'Proceed to Production?'
-   }
+   //stage('2nd Approval') {
+   //   input 'Proceed to Production?'
+   //}
 
    stage('Export WAF Policy and resolve vulnerabilities') {
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'bigips', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
@@ -238,7 +238,7 @@ node {
                     bigip_password: PASSWORD,
                     fqdn: fqdn,
                     appName: appName,
-                    fileName: "${env.BUILD_ID}_dast.xml"
+                    buildId: "${env.BUILD_ID}"
             ])
             ansiblePlaybook(
                 colorized: true, 
