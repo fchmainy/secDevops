@@ -17,6 +17,15 @@
         register: policyId
 #        no_log: true
 
+      - name: ENABLE GENERIC DAST
+        f5_asm_enableDAST:
+            server: "{{ inventory_hostname }}"
+            policyId: "{{ policyId.policyId }}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            validate_certs: "{{ validate_certs }}"
+        delegate_to: localhost
+        
       - name: UPLOAD XML DAST OUTPUT
         f5_uploadFile:
             connection: "rest"
