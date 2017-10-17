@@ -9,9 +9,8 @@
 
       - name: UPLOAD XML ASM POLICY...
         f5_uploadFile:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
-            fileName: "/tmp/{{ appName }}_asm.xml"
+            fileName: "{{ appName }}_asm.xml"
             fileType: "policy"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
@@ -21,9 +20,9 @@
 
       - name: IMPORT POLICY
         f5_asm_importPolicy:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             serviceName: "{{ appName }}"
+            fileName: "{{ appName }}_asm.xml"
             targetPolicy: "asm_tested_{{ appName }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
@@ -33,7 +32,6 @@
 
       - name: GET STATUS OF THE IMPORT
         f5_asm_getStatus:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             taskId: "{{taskId.taskId}}"
             taskType: "import-policy"
@@ -41,7 +39,7 @@
             password: "{{ bigip_password }}"
             validate_certs: "{{ validate_certs }}"
         delegate_to: localhost
-        register: status
-        until: status.taskStatus == "COMPLETED"
+        register: myStatus
+        until: myStatus.taskStatus | default("COMPLETED")== "COMPLETED"
         retries: 10
         delay: 5
