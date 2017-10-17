@@ -19,7 +19,6 @@
 
       - name: EXPORT POLICY
         f5_asm_exportPolicy:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             serviceName: "{{ appName }}_asm"
             policyId: "{{policyId.policyId}}"
@@ -32,7 +31,6 @@
 
       - name: GET STATUS OF THE EXPORT
         f5_asm_getStatus:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             taskId: "{{taskId.exportTask}}"
             taskType: "export-policy"
@@ -47,7 +45,6 @@
 
       - name: GET EXPORTED POLICY
         f5_asm_getExportedPolicy:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             serviceName: "{{ appName }}_asm"
             user: "{{ bigip_username }}"
