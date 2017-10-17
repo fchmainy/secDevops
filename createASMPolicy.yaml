@@ -34,5 +34,5 @@
             server: "{{ inventory_hostname }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
-            policyId: "{{ policyId.policyId }}”
+            policyId: "{{ policyId.policyId }}"
 
