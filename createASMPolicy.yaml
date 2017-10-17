@@ -19,3 +19,20 @@
             virtual: "{{appName}}_vs"
             lang: "utf-8"
             enforcementMode: "blocking"
+
+      - name: get ID
+        f5_asm_getPolicyID:
+            server: "{{ inventory_hostname }}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            policyName: "{{ appName }}_asm"
+            validate_certs: "{{ validate_certs }}"
+        register: policyId
+
+      - name: Force Learning of URLs
+        f5_asm_learnURLS:
+            server: "{{ inventory_hostname }}"
+            user: "{{ bigip_username }}"
+            password: "{{ bigip_password }}"
+            policyId: "{{ policyId.policyId }}”
+
