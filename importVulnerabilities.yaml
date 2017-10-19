@@ -29,7 +29,7 @@
       - name: UPLOAD XML DAST OUTPUT
         f5_uploadFile:
             server: "{{ inventory_hostname }}"
-            fileName: "dast_{{appName}}.xml"
+            fileName: "{{ buildId }}_dast.xml"
             fileType: "vulnerabilities"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
