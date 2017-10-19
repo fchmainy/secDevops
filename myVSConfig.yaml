@@ -17,7 +17,6 @@
 
       - name: Add a Pool
         f5_pool:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             transactionId: "{{transId.transId}}"
             user: "{{ bigip_username }}"
@@ -30,7 +29,6 @@
 
       - name: Add a Member
         f5_member:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             transactionId: "{{transId.transId}}"
             user: "{{ bigip_username }}"
@@ -46,7 +44,6 @@
 
       - name: Create a Virtual
         f5_virtual:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             transactionId: "{{transId.transId}}"
             user: "{{ bigip_username }}"
@@ -64,7 +61,6 @@
 
       - name: Attach a Client SSL Profile with wildcard certificate
         f5_attach_vs_profile:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             transactionId: "{{transId.transId}}"
             user: "{{ bigip_username }}"
@@ -75,7 +71,6 @@
 
       - name: Attach an HTTP Profile to Virtual
         f5_attach_vs_profile:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             transactionId: "{{transId.transId}}"
             user: "{{ bigip_username }}"
