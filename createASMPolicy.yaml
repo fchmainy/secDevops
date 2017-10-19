@@ -9,7 +9,6 @@
 
       - name: Create an ASM Policy based on a Template and apply it to a VS
         f5_asmPolicy:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
