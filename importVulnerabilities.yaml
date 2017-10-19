@@ -28,7 +28,6 @@
         
       - name: UPLOAD XML DAST OUTPUT
         f5_uploadFile:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             fileName: "dast_{{appName}}.xml"
             fileType: "vulnerabilities"
@@ -40,7 +39,6 @@
 
       - name: IMPORT VULNERABILITIES
         f5_asm_importVulnerabilities:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             serviceName: "{{ appName }}_asm"
             policyId: "{{ policyId.policyId }}"
@@ -53,7 +51,6 @@
 
       - name: GET STATUS OF THE IMPORT
         f5_asm_getStatus:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             taskId: "{{ taskId.importTask }}"
             taskType: "import-vulnerabilities"
@@ -68,7 +65,6 @@
 
       - name: COLLECT VULNERABILITIES...
         f5_asm_collectVulnerabilities:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             policyId: "{{ policyId.policyId }}"
             user: "{{ bigip_username }}"
@@ -80,7 +76,6 @@
 
       - name: RESOLVE VULNERABILITIES...
         f5_asm_resolveVulnerabilities:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             vulnerabilities: "{{ vulnsArray.vulnerabilities }}"
             policyId: "{{ policyId.policyId }}"
@@ -93,7 +88,6 @@
 
       - name: GET STATUS OF VULNERABILITIES RESOLVING...
         f5_asm_getStatus:
-            connection: "rest"
             server: "{{ inventory_hostname }}"
             taskId: "{{ taskId.resolveId }}"
             taskType: "resolve-vulnerabilities"
