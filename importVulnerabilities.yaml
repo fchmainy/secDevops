@@ -41,6 +41,7 @@
         f5_asm_importVulnerabilities:
             server: "{{ inventory_hostname }}"
             serviceName: "{{ appName }}_asm"
+            fileName: "{{ buildId }}_dast.xml"
             policyId: "{{ policyId.policyId }}"
             user: "{{ bigip_username }}"
             password: "{{ bigip_password }}"
