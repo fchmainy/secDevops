@@ -23,7 +23,7 @@
             password: "{{ bigip_password }}"
             validate_certs: "{{ validate_certs }}"
             name: "{{appName}}_pool"
-            monitor: "http"
+            monitor: "tcp"
         delegate_to: localhost
         register: result
 
