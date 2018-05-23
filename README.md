@@ -5,7 +5,7 @@ Jenkins and Ansible pipeline as code to demonstrate a full automatated pipeline 
 Few details here:
 - steps:
   1. Deployment in QA env for unit testings. Learning and WAF policy tightening are done based on app spidering (whitelisting) and vulnerability scans (Server Technology Detection + vulnerabilities resolutions).
-  2 Deployment in Production using the validated ASM Policy.
+  2. Deployment in Production using the validated ASM Policy.
 
 - IP addresses are dynamically requested from PHP IPAM (https://phpipam.net/) through its API.
 - Unit tests and security tests are performed on QA:
