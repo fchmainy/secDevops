@@ -20,7 +20,7 @@ def notifySlack(text, channel, attachments) {
 
 node {
    stage('Preparation') { 
-            git 'https://github.com/fchmainy/DevSecOps.git'   
+            git 'https://github.com/fchmainy/secDevops.git'   
        
             // Setting up environment variables
             echo "setting up variables..."
